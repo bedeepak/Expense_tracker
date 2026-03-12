@@ -13,6 +13,7 @@
             <th>Category</th>
             <th>Amount</th>
             <th>Date</th>
+            <th>Actions</th>
         </tr>
     </thead>
 
@@ -23,6 +24,10 @@
             <td>{{ expense.category }}</td>
             <td>{{ expense.amount }}</td>
             <td>{{ expense.date }}</td>
+            <td>
+                <a href="/expenses/edit/{{ expense.id }}/" class="btn btn-warning btn-sm">Edit</a>
+                <a href="/expenses/delete/{{ expense.id }}/" class="btn btn-danger btn-sm">Delete</a>
+            </td>
         </tr>
         {% empty %}
         <tr>
