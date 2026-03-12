@@ -7,13 +7,20 @@ from .models import Expense
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.db.models import Sum
+from django.db.models.functions import TruncMonth
 
 import json
 import csv
+import pickle
 
 # Create your views here.
 
 from .forms import ExpenseForm
+
+model = pickle.load(open('tracker/expense_model.pkl', 'rb'))
+
+def predict_category_ml(text):
+    return model.predict([text])[0]
 
 @login_required
 def add_expense(request):
@@ -37,7 +44,7 @@ def add_expense(request):
         if form.is_valid():
             expense = form.save(commit=False)
             expense.user = request.user
-            expense.category = predict_category(expense.description)
+            expense.category = predict_category_ml(expense.description)
             expense.save()
             return redirect('add_expense')
     else:
@@ -83,8 +90,21 @@ def dashboard(request):
         request: The HTTP request object.
     Returns:
         An HTTP response with the rendered dashboard containing the user's expenses.
+
     """
     expenses = Expense.objects.filter(user=request.user).order_by('-date')
+
+    monthly_data = (
+        Expense.objects
+        .filter(user=request.user)
+        .annotate(month=TruncMonth('date'))
+        .values('month')
+        .annotate(total=Sum('amount'))
+        .order_by('month')
+    )
+
+    months = [item['month'].strftime('%B %Y') for item in monthly_data]
+    monthly_totals = [float(item['total']) for item in monthly_data]
 
     category_data = (
         Expense.objects
@@ -109,6 +129,8 @@ def dashboard(request):
         'expenses': expenses,
         'labels': json.dumps(labels),
         'data': json.dumps(data),
+        'months': json.dumps(months),
+        'monthly_totals': json.dumps(monthly_totals),
         'total_expenses': total_expenses,
         'food_total': food_total,
         'transport_total': transport_total,
