@@ -116,5 +116,5 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-LOGIN_REDECT_URL = '/expenses/add/'
+LOGIN_REDECT_URL = '/expenses/'
 LOGOUT_REDIRECT_URL = '/accounts/login/'
