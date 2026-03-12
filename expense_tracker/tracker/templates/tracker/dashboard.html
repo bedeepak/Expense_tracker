@@ -1,0 +1,36 @@
+{% extends "tracker/base.html" %}
+
+{% block content %}
+
+<h2>Expense Dashboard</h2>
+
+<a href="/expenses/add/" class="btn btn-success mb-3">Add Expense</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Description</th>
+            <th>Category</th>
+            <th>Amount</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for expense in expenses %}
+        <tr>
+            <td>{{ expense.description }}</td>
+            <td>{{ expense.category }}</td>
+            <td>{{ expense.amount }}</td>
+            <td>{{ expense.date }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4">No expenses added yet.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+
+</table>
+
+{% endblock %}
