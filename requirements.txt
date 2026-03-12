@@ -1,0 +1,4 @@
+kaggle
+scikit-learn
+pandas
+django
