@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
 from .models import Expense
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 
@@ -82,3 +83,55 @@ def dashboard(request):
         'expenses': expenses
     }
     return render(request, 'tracker/dashboard.html', context)
+
+@login_required
+def edit_expense(request, id):
+    """
+    View function to handle editing an existing expense.
+
+    This view processes both GET and POST requests. For GET requests, it
+    retrieves the specified Expense instance and renders a pre-filled
+    ExpenseForm for the user to edit. For POST requests, it validates the
+    submitted form data and updates the Expense instance if the data is
+    valid. If the form is invalid, it re-renders the form with error
+    messages.
+
+    Args:
+        request: The HTTP request object.
+        expense_id: The ID of the expense to be edited.
+    Returns:
+        An HTTP response with the rendered form or a redirect after successful update.
+    """
+    expense = get_object_or_404(Expense, id=id, user=request.user)
+    if request.method == "POST":
+        form = ExpenseForm(request.POST, instance=expense)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard')
+    else:
+        form = ExpenseForm(instance=expense)
+
+    return render(request, 'tracker/edit_expense.html', {'form': form})
+
+@login_required
+def delete_expense(request, id):
+    """
+    View function to handle the deletion of an expense.
+
+    This view retrieves the specified Expense instance and deletes it from
+    the database. After deletion, it redirects the user back to the
+    dashboard.
+
+    Args:
+        request: The HTTP request object.
+        expense_id: The ID of the expense to be deleted.
+    Returns:
+        An HTTP response that redirects to the dashboard after deletion.
+    """
+    expense = get_object_or_404(Expense, id=id, user=request.user)
+
+    if request.method == "POST":
+        expense.delete()
+        return redirect('dashboard')
+    
+    return render(request, 'tracker/delete_expense.html', {'expense': expense})
