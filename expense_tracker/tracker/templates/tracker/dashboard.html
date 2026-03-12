@@ -2,152 +2,215 @@
 
 {% block content %}
 
-<h2>Expense Dashboard</h2>
+<h3 class="mb-4">Expense Dashboard</h3>
 
-<a href="/expenses/add/" class="btn btn-success mb-3">Add Expense</a>
+<div class="row">
 
-<a href="/expenses/export-csv/" class="btn btn-info mb-3">Download CSV Report</a>
-
-<h3>Expense Analytics</h3>
-
-<div class="mx-auto" style="width:450px; height:450px;">
-    <canvas id="expenseChart"></canvas>
+<div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+<div class="card bg-primary text-white p-3">
+<h6>Total Expenses</h6>
+<h4>₹{{ total_expenses|floatformat:2 }}</h4>
+</div>
 </div>
 
-<div class="row mb-4">
-    <div class="col-md-3">
-        <div class="card text-white bg-primary">
-            <div class="card-body">
-                <h3>₹{{ total_expenses|floatformat:2 }}</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-white bg-success">
-            <div class="card-body">
-                <h3>₹{{ food_total|floatformat:2 }}</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-white bg-warning">
-            <div class="card-body">
-                <h3>₹{{ transport_total|floatformat:2 }}</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-white bg-danger">
-            <div class="card-body">
-                <h3>₹{{ entertainment_total|floatformat:2 }}</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3 mt-3">
-        <div class="card text-white bg-secondary">
-            <div class="card-body">
-                <h3>₹{{ utilities_total|floatformat:2 }}</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3 mt-3">
-        <div class="card text-white bg-dark">
-            <div class="card-body">
-                <h3>₹{{ groceries_total|floatformat:2 }}</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3 mt-3">
-        <div class="card text-white bg-info">
-            <div class="card-body">
-                <h3>₹{{ health_total|floatformat:2 }}</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3 mt-3">
-        <div class="card text-white bg-primary">
-            <div class="card-body">
-                <h3>₹{{ education_total|floatformat:2 }}</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3 mt-3">
-        <div class="card text-white bg-success">
-            <div class="card-body">
-                <h3>₹{{ shopping_total|floatformat:2 }}</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3 mt-3">
-        <div class="card text-white bg-warning">
-            <div class="card-body">
-                <h3>{{ expense_count }} Expenses</h3>
-            </div>
-        </div>
-    </div>
+<div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+<div class="card bg-success text-white p-3">
+<h6>Food</h6>
+<h4>₹{{ food_total|floatformat:2 }}</h4>
+</div>
+</div>
+
+<div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+<div class="card bg-warning text-white p-3">
+<h6>Transport</h6>
+<h4>₹{{ transport_total|floatformat:2 }}</h4>
+</div>
+</div>
+
+<div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+<div class="card bg-danger text-white p-3">
+<h6>Entertainment</h6>
+<h4>₹{{ entertainment_total|floatformat:2 }}</h4>
+</div>
+</div>
+
+<div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+<div class="card bg-secondary text-white p-3">
+<h6>Utilities</h6>
+<h4>₹{{ utilities_total|floatformat:2 }}</h4>
+</div>
+</div>
+
+<div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+<div class="card bg-dark text-white p-3">
+<h6>Groceries</h6>
+<h4>₹{{ groceries_total|floatformat:2 }}</h4>
+</div>
+</div>
+
+<div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+<div class="card bg-info text-white p-3">
+<h6>Health</h6>
+<h4>₹{{ health_total|floatformat:2 }}</h4>
+</div>
+</div>
+
+<div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+<div class="card bg-primary text-white p-3">
+<h6>Education</h6>
+<h4>₹{{ education_total|floatformat:2 }}</h4>
+</div>
+</div>
+
+<div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+<div class="card bg-success text-white p-3">
+<h6>Shopping</h6>
+<h4>₹{{ shopping_total|floatformat:2 }}</h4>
+</div>
+</div>
+
+<div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+<div class="card bg-warning text-white p-3">
+<h6>Total Records</h6>
+<h4>{{ expense_count }}</h4>
+</div>
+</div>
+
+</div>
+
+<div class="row mt-3">
+
+<div class="col-lg-6">
+<div class="card p-4">
+<h5 class="mb-3">Expense Distribution</h5>
+<canvas id="expenseChart"></canvas>
+</div>
+</div>
+
+<div class="col-lg-6">
+<div class="card p-4">
+<h5 class="mb-3">Monthly Expense Trend</h5>
+<canvas id="monthlyChart"></canvas>
+</div>
+</div>
+
+</div>
+
+<div class="card p-4 mt-4">
+
+<h5 class="mb-3">Recent Expenses</h5>
+
+<table class="table table-hover table-striped">
+
+<thead class="table-dark">
+<tr>
+<th>Description</th>
+<th>Category</th>
+<th>Amount</th>
+<th>Date</th>
+<th>Actions</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for expense in expenses %}
+
+<tr>
+<td>{{ expense.description }}</td>
+<td>{{ expense.category }}</td>
+<td>{{ expense.amount }}</td>
+<td>{{ expense.date }}</td>
+
+<td>
+
+<a href="/expenses/edit/{{ expense.id }}/" class="btn btn-warning btn-sm">
+Edit
+</a>
+
+<a href="/expenses/delete/{{ expense.id }}/" class="btn btn-danger btn-sm">
+Delete
+</a>
+
+</td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+<td colspan="5">No expenses added yet</td>
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
 </div>
 
 <script>
 
-document.addEventListener("DOMContentLoaded", function() {
+const labels = JSON.parse('{{ labels|escapejs }}');
+const data = JSON.parse('{{ data|escapejs }}');
 
-    const labels = JSON.parse('{{ labels|escapejs }}');
-    const data = JSON.parse('{{ data|escapejs }}');
+new Chart(document.getElementById('expenseChart'), {
 
-    const ctx = document.getElementById('expenseChart');
+type: 'pie',
 
-    new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Expense by Category',
-                data: data,
-                backgroundColor: [
-                    '#ff6384',
-                    '#36a2eb',
-                    '#ffce56',
-                    '#4bc0c0',
-                    '#9966ff'
-                ]
-            }]
-        }
-    });
+data: {
+
+labels: labels,
+
+datasets: [{
+
+data: data,
+
+backgroundColor: [
+'#ff6384',
+'#36a2eb',
+'#ffce56',
+'#4bc0c0',
+'#9966ff'
+]
+
+}]
+
+}
+
+});
+
+
+const months = JSON.parse('{{ months|escapejs }}');
+const monthlyTotals = JSON.parse('{{ monthly_totals|escapejs }}');
+
+new Chart(document.getElementById('monthlyChart'), {
+
+type: 'line',
+
+data: {
+
+labels: months,
+
+datasets: [{
+
+label: 'Monthly Expenses',
+
+data: monthlyTotals,
+
+borderColor:'#36A2EB',
+
+tension:0.3,
+
+fill:false
+
+}]
+
+}
 
 });
 
 </script>
-
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Description</th>
-            <th>Category</th>
-            <th>Amount</th>
-            <th>Date</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        {% for expense in expenses %}
-        <tr>
-            <td>{{ expense.description }}</td>
-            <td>{{ expense.category }}</td>
-            <td>{{ expense.amount }}</td>
-            <td>{{ expense.date }}</td>
-            <td>
-                <a href="/expenses/edit/{{ expense.id }}/" class="btn btn-warning btn-sm">Edit</a>
-                <a href="/expenses/delete/{{ expense.id }}/" class="btn btn-danger btn-sm">Delete</a>
-            </td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="4">No expenses added yet.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-
-</table>
 
 {% endblock %}
